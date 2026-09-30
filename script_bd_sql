@@ -1,0 +1,10 @@
+CREATE TABLE item_pedido(
+ id_item_pedido int PRIMARY KEY,
+ id_pedido int not null,
+ id_ingrediente int not null,
+ quantidade decimal(10,2) not null,
+ preco_unitario decimal(10,2) not null,
+ foi_subtituido boolean
+);
+
+
