@@ -1,0 +1,14 @@
+create table public.usuario (
+    id_usuario serial not null,
+    nome character varchar(100) not null,
+    email character varchar(100) not null,
+    senha_hash character var(255) not null,
+    cpf_criptografado character varchar(255) not null,
+    tipo_perfil character varchar(255) not null,
+    data_nascimento date not null,
+    idioma_preferido character varchar(5) null,
+    eh_assinante_premium boolean null,
+    termo_lgpd_aceito boolean not null,
+    data_criacao timestamp without time zone null,
+    constraint usuario_pkey primary key (id_usuario)
+) TABLESPACE pg_default;
