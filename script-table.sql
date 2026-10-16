@@ -1,70 +1,27 @@
-CREATE TABLE item_pedido(
- id_item_pedido int PRIMARY KEY,
- id_pedido int not null,
- id_ingrediente int not null,
- quantidade decimal(10,2) not null,
- preco_unitario decimal(10,2) not null,
- foi_subtituido boolean
-);
 create table public.usuario (
     id_usuario serial not null,
-    nome character varchar(100) not null,
-    email character varchar(100) not null,
-    senha_hash character var(255) not null,
-    cpf_criptografado character varchar(255) not null,
-    tipo_perfil character varchar(255) not null,
+    nome varchar(100) not null,
+    email  varchar(100) not null,
+    senha_hash varchar(255) not null,
+    cpf_criptografado varchar(255) not null,
+    tipo_perfil  varchar(255) not null,
     data_nascimento date not null,
-    idioma_preferido character varchar(5) null,
+    idioma_preferido  varchar(5) null,
     eh_assinante_premium boolean null,
     termo_lgpd_aceito boolean not null,
-    data_criacao timestamp without time zone null,
+    data_criacao timestamp null,
     constraint usuario_pkey primary key (id_usuario)
 ) TABLESPACE pg_default;
-CREATE TABLE ingredientes(
- id_ingrediente SERIAL PRIMARY KEY,
- nome varchar (100) not null,
- categoria varchar (50) not null,
- unidade_medida_padrao varchar (20) not null
-);
 
-SELECT * FROM ingredientes;
-CREATE TABLE usuario(
- id_usuario SERIAL PRIMARY KEY,
- nome varchar(100) not null,
- email varchar(100) not null,
- senha_hash varchar(255) not null,
- cpf_criptografado varchar(255) not null,
- tipo_perfil varchar(255) not null,
- data_nascimento date not null, 
- idioma_preferido varchar(5),
- eh_assinante_premium  boolean,
- termo_lgpd_aceito boolean not null,
- data_criacao timestamp
-);
-
-SELECT * FROM usuario;
-CREATE TABLE estoque(
- id_estoque SERIAL PRIMARY KEY,
- id_mercado int not null,
- id_inrediente int not null,
- preco_unitario decimal(10,2) not null,
- quantidade_disponivel decimal(10,2) not null
-);
-
-SELECT * FROM estoque;
- quantidade_disponivel numeric(10, 2) not null,
-  constraint estoque_pkey primary key (id_estoque)
+create table public.ingrediente (
+    id_ingrediente serial not null,
+    nome  varchar(100) not null,
+    categoria  varchar(50) not null,
+    unidade_medida_padrao varchar(20) not null,
+    constraint ingrediente_pkey primary key (id_ingrediente)
 ) TABLESPACE pg_default;
 
-create table public.item_pedido (
-  id_item_pedido serial not null,
-  fk_pedido integer null,
-  fk_ingrediente integer null,
-  quantidade numeric(10, 2) null,
-  preco_unitario numeric(10, 2) null,
-  foi_substituido boolean null,
-  constraint item_pedido_pkey primary key (id_item_pedido)
-) TABLESPACE pg_default;
+
 CREATE TABLE despesa_virtual (
     id_despesa SERIAL PRIMARY KEY,
     fk_despesa INT,
@@ -75,11 +32,98 @@ CREATE TABLE despesa_virtual (
 );
 
 SELECT * FROM despesa_virtual;
-create table public.mercado_parceiro (
-    id_mercado integer not null,
-    nome varchar(100) not null,
-    categoria varchar(50) not null,
-    unidade_medida_padrao  varchar(20) not null,
-    constraint mercado_parceiro_pkey primary key (id_mercado)
-) TABLESPACE pg_default;
 
+
+CREATE TABLE item_pedido (
+    id_item_pedido SERIAL PRIMARY KEY,
+    fk_pedido int,
+    fk_ingrediente int,
+    quantidade decimal(10,2),
+    preco_unitario decimal(10,2),
+    foi_substituido boolean
+);
+
+SELECT * FROM item_pedido; 
+
+
+
+CREATE TABLE receita (
+  id_receita SERIAL PRIMARY KEY,
+  id_autor_chef int,
+  titulo varchar(150) not null,
+  modo_preparo text not null,
+  tempo_preparo_minutos int not null,
+  nivel_dificuldade varchar (255),
+  eh_exclusive_premium boolean,
+  data_cadastro timestamp
+);
+
+SELECT * FROM receita; 
+
+
+CREATE TABLE pedido (
+ id_pedido SERIAL PRIMARY KEY,
+ fk_cliente  INT,
+ fk_mercado  INT,
+ fk_entregador INT,
+ fk_cupom  INT,
+ tipo_entrega varchar(255) not null,
+ status_pedido_enum varchar(255) not null,
+ permite_substituicao_marca boolean,
+ valor_subtotal decimal(10,2),
+ valor_desconto decimal(10,2),
+ valor_total decimal(10,2),
+ data_pedido timestamp
+);
+
+SELECT * FROM pedido; 
+
+
+CREATE TABLE estoque_mercado (
+ id_mercado SERIAL PRIMARY KEY,
+ fk_ingrediente  INT not null,
+ preco_unitario  decimal(10,2) not null,
+ quantidade_disponivel  decimal(10,2)   not null
+);
+
+SELECT * FROM estoque_mercado; 
+
+
+CREATE TABLE mercado_parceiro(
+ id_usuario_lojista SERIAL PRIMARY KEY,
+ nome_fantasia varchar(120) not null,
+ cnpj  varchar(18) not null,
+ valor_pedido_minimo  decimal(10,2) not null,
+ latitude  decimal(10,2) not null,
+ longitude  decimal(10,2) not null,
+ ativo  boolean
+);
+
+SELECT * FROM mercado_parceiro; 
+
+
+CREATE TABLE cupom_desconto(
+ id_cupom SERIAL PRIMARY KEY,
+ id_mercado int,
+ codigo_cupom  varchar(30) not null,
+ percentual_desconto  decimal(5,2),
+ valor_desconto_fixo  decimal(10,2),
+ data_validade   timestamp not null,
+ ativo  boolean
+);
+
+SELECT * FROM cupom_desconto; 
+
+
+
+CREATE TABLE ingrediente_receita(
+ id_ingrediente_receita SERIAL PRIMARY KEY,
+ id_receita INT  not null,
+ id_ingredienta INT not null,
+ quantidade  decimal(10,2),
+ unhidade_medida  varchar(20),
+ id_ingrediente_substituto  INT,
+ eh_obrigatorio  boolean
+);
+
+SELECT * FROM ingrediente_receita; 
