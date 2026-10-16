@@ -52,3 +52,16 @@ CREATE TABLE estoque(
 );
 
 SELECT * FROM estoque;
+ quantidade_disponivel numeric(10, 2) not null,
+  constraint estoque_pkey primary key (id_estoque)
+) TABLESPACE pg_default;
+
+create table public.item_pedido (
+  id_item_pedido serial not null,
+  fk_pedido integer null,
+  fk_ingrediente integer null,
+  quantidade numeric(10, 2) null,
+  preco_unitario numeric(10, 2) null,
+  foi_substituido boolean null,
+  constraint item_pedido_pkey primary key (id_item_pedido)
+) TABLESPACE pg_default;
