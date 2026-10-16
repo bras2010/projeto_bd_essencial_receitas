@@ -65,3 +65,14 @@ create table public.item_pedido (
   foi_substituido boolean null,
   constraint item_pedido_pkey primary key (id_item_pedido)
 ) TABLESPACE pg_default;
+CREATE TABLE despesa_virtual (
+    id_despesa SERIAL PRIMARY KEY,
+    fk_despesa INT,
+    fk_ingrediente INT,
+    quantidade decimal(10,2),
+    unidade_medida varchar(20),
+    data_atualizacao timestamp
+);
+
+SELECT * FROM despesa_virtual;
+
